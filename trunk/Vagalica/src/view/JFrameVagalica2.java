@@ -229,12 +229,7 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
         jMenuItemNewGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                centarBottom.add(label);
-                Random r = new Random();
-                int br = r.nextInt(200-50)+50;
-                random = Integer.toString(br);
-                label.setText(random);
-                label.setFont(new Font("Tahoma", Font.BOLD, 14));
+                initGame();
             }
         });
         
@@ -245,7 +240,11 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
     }
     
     public void initGame(){
-        
+        Random r = new Random();
+        int br = r.nextInt(200-50)+50;
+        random = Integer.toString(br);
+        label.setText(random);
+        label.setFont(new Font("Tahoma", Font.BOLD, 14));
     }
         
     
