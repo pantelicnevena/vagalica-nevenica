@@ -6,6 +6,7 @@
 
 package brojevi;
 
+import java.util.Objects;
 import javax.swing.JButton;
 
 /**
@@ -20,9 +21,10 @@ public class Button {
     public Button() {
     }
 
-    public Button(int mValue, JButton mButton) {
+    public Button(int mValue) {
         this.mValue = mValue;
-        this.mButton = mButton;
+        this.mButton = mButton;        
+        this.mButton.setText(Integer.toString(mValue));
     }
 
     public int getmValue() {
@@ -39,6 +41,30 @@ public class Button {
 
     public void setmButton(JButton mButton) {
         this.mButton = mButton;
+    }
+
+    @Override
+    public String toString() {
+        return "Button{" + "mValue=" + mValue + ", mButton=" + mButton + '}';
+    }
+
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Button other = (Button) obj;
+        if (this.mValue != other.mValue) {
+            return false;
+        }
+        if (!Objects.equals(this.mButton, other.mButton)) {
+            return false;
+        }
+        return true;
     }
     
     
