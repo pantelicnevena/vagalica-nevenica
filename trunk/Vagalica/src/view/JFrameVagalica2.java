@@ -6,14 +6,20 @@
 
 package view;
 
+import brojevi.Button;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Random;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -163,6 +169,7 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
     public JPanel panel2Centar;
     public JPanel centarCentar;
     
+    
     public void dodajKomponente(){
         panel = new JPanel();
         panel1 = new JPanel();
@@ -239,12 +246,28 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
         setVisible(true);
     }
     
+    public LinkedList<Button> mSredisnjiDugmici;      //type List does not take parameters
+        
     public void initGame(){
         Random r = new Random();
         int br = r.nextInt(200-50)+50;
         random = Integer.toString(br);
         label.setText(random);
         label.setFont(new Font("Tahoma", Font.BOLD, 14));
+        
+        mSredisnjiDugmici = new LinkedList<Button>();
+        centarCentar.removeAll();
+        for (int i=0; i<20; i++){
+            int bBr = r.nextInt(30-5)+5;
+            //Button dugmic = new Button(bBr);
+            //mSredisnjiDugmici.add(dugmic);
+            //Collections.sort(mSredisnjiDugmici, Collections.reverseOrder());
+            centarCentar.add(new JButton(String.valueOf(bBr)));
+        }
+        
+        
+        
+        
     }
         
     
