@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -219,7 +220,7 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
         
         panel1Centar.setLayout(new GridLayout(0, 1));
         panel2Centar.setLayout(new GridLayout(0, 1));
-        centarCentar.setLayout(new GridLayout(0, 1));
+        centarCentar.setLayout(new GridLayout(0, 2));
         
         JLabel labela1 = new JLabel("Player 1");
         JLabel labela2 = new JLabel("Player 2");
@@ -246,7 +247,9 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
         setVisible(true);
     }
     
-    public LinkedList<Button> mSredisnjiDugmici;      //type List does not take parameters
+    public ArrayList<Button> mSredisnjiDugmici;
+    public ArrayList<Button> mPlayer1;
+    public ArrayList<Button> mPlayer2;
         
     public void initGame(){
         Random r = new Random();
@@ -255,15 +258,24 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
         label.setText(random);
         label.setFont(new Font("Tahoma", Font.BOLD, 14));
         
-        mSredisnjiDugmici = new LinkedList<Button>();
+        mSredisnjiDugmici = new ArrayList<Button>();
+        
         centarCentar.removeAll();
+        
         for (int i=0; i<20; i++){
             int bBr = r.nextInt(30-5)+5;
-            //Button dugmic = new Button(bBr);
-            //mSredisnjiDugmici.add(dugmic);
+            Button dugmici = new Button();
+            dugmici.setmValue(bBr);
+            mSredisnjiDugmici.add(dugmici);
+            
             //Collections.sort(mSredisnjiDugmici, Collections.reverseOrder());
-            centarCentar.add(new JButton(String.valueOf(bBr)));
+            //Sortirati listu, tako da i prikazani dugmici budu sortirani od najmanjeg ka najvecem
+            
+            centarCentar.add(new JButton(String.valueOf(mSredisnjiDugmici.get(i).getmValue())));
         }
+        
+        
+        
         
         
         
