@@ -15,15 +15,15 @@ import javax.swing.JButton;
  */
 public class Button {
     
-    int mValue;
-    JButton mButton;
+    private int mValue;
+    private JButton mButton;
 
     public Button() {
     }
 
     public Button(int mValue) {
         this.mValue = mValue;
-        this.mButton = mButton;        
+        this.mButton = new JButton();        
         this.mButton.setText(Integer.toString(mValue));
     }
 
