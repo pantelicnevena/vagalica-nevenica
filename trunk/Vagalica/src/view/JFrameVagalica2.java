@@ -15,8 +15,10 @@ import java.awt.GridLayout;
 import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Random;
 import javax.swing.Action;
@@ -170,6 +172,9 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
     public JPanel panel2Centar;
     public JPanel centarCentar;
     
+    JButton dugmic;
+    int indeksDugmica;
+    String komanda;
     
     public void dodajKomponente(){
         panel = new JPanel();
@@ -250,8 +255,20 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
     public ArrayList<Button> mSredisnjiDugmici;
     public ArrayList<Button> mPlayer1;
     public ArrayList<Button> mPlayer2;
+    
+    boolean player1;
+    boolean player2;
+    
+    int brojac1;
+    int brojac2;
+    int brKlikova;
         
     public void initGame(){
+        player1 = true;
+        brKlikova = 0;
+        brojac1 = 0;
+        brojac2 = 0;
+        
         Random r = new Random();
         int br = r.nextInt(200-50)+50;
         random = Integer.toString(br);
@@ -259,28 +276,99 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
         label.setFont(new Font("Tahoma", Font.BOLD, 14));
         
         mSredisnjiDugmici = new ArrayList<Button>();
+        mPlayer1 = new ArrayList<Button>();
+        mPlayer2 = new ArrayList<Button>();
         
         centarCentar.removeAll();
         
         for (int i=0; i<20; i++){
             int bBr = r.nextInt(30-5)+5;
-            Button dugmici = new Button();
-            dugmici.setmValue(bBr);
+            Button dugmici = new Button(bBr);
+            //dugmici.setmValue(bBr);
             mSredisnjiDugmici.add(dugmici);
             
-            //Collections.sort(mSredisnjiDugmici, Collections.reverseOrder());
-            //Sortirati listu, tako da i prikazani dugmici budu sortirani od najmanjeg ka najvecem
+            /*Collections.sort(mSredisnjiDugmici, new Comparator<Button>(){
+                public int compare(Button b1, Button b2){                    
+                }
+            });
+            Sortirati listu, tako da i prikazani dugmici budu sortirani od najmanjeg ka najvecem*/
             
-            centarCentar.add(new JButton(String.valueOf(mSredisnjiDugmici.get(i).getmValue())));
+            centarCentar.add(mSredisnjiDugmici.get(i).getmButton());
+            
+            komanda = String.valueOf(i);
+            mSredisnjiDugmici.get(i).getmButton().setActionCommand(komanda);
+            mSredisnjiDugmici.get(i).getmButton().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    indeksDugmica = Integer.valueOf(e.getActionCommand());
+                    JButton but = (JButton) mSredisnjiDugmici.get(indeksDugmica).getmButton();
+                    but.setVisible(false);
+                    onClick();
+                }
+            });
+        }
+        
+    }
+    
+    
+    
+    public void onClick(){
+        
+        
+        if (player1 == true){
+            player1 = false;
+            int val = mSredisnjiDugmici.get(Integer.valueOf(indeksDugmica)).getmValue();
+            Button dugmic1 = new Button(val);
+            mPlayer1.add(dugmic1);
+            JButton dugmePrvo = mPlayer1.get(brojac1).getmButton();
+            dugmePrvo.setActionCommand(String.valueOf(brojac1));
+            dugmePrvo.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            panel1Centar.add(dugmePrvo);
+            brojac1 ++;
+        }else{
+            player1 = true;
+            int val = mSredisnjiDugmici.get(indeksDugmica).getmValue();
+            Button dugmic2 = new Button(val);
+            mPlayer2.add(dugmic2);
+            JButton dugmeDrugo = mPlayer2.get(brojac2).getmButton();
+            dugmeDrugo.setActionCommand(String.valueOf(brojac2));
+            dugmeDrugo.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            panel2Centar.add(dugmeDrugo);
+            brojac2 ++;
         }
         
         
+        brKlikova ++;
         
-        
-        
-        
+        if (brKlikova == 10) {
+            for (int i=0; i<20; i++){
+                mSredisnjiDugmici.get(i).getmButton().setVisible(false);
+            }
+            mSredisnjiDugmici = new ArrayList<>();
+            startGame();
+        }
+    }
+    
+    public void startGame(){
+        for (int i=0; i<5; i++){
+            String komanda1 = String.valueOf(i);
+            
+            //mPlayer1.get(i).getmButton().setActionCommand(komanda);
+            //mPlayer2.get(i).getmButton().setActionCommand(komanda);
+            
+            
+        }
         
     }
-        
     
 }
