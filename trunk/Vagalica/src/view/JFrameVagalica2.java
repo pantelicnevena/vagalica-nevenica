@@ -7,6 +7,7 @@
 package view;
 
 import brojevi.Button;
+import com.sun.jmx.snmp.BerDecoder;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,7 +16,6 @@ import java.awt.GridLayout;
 import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -171,10 +171,7 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
     public JPanel panel1Centar;
     public JPanel panel2Centar;
     public JPanel centarCentar;
-    
-    JButton dugmic;
-    int indeksDugmica;
-    String komanda;
+
     
     public void dodajKomponente(){
         panel = new JPanel();
@@ -242,7 +239,10 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
         jMenuItemNewGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
+                panel1Centar.removeAll();
+                panel2Centar.removeAll();
                 initGame();
+                
             }
         });
         
@@ -251,17 +251,20 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
         pack();
         setVisible(true);
     }
+        
+    JButton dugmic;
+    String komanda;
     
     public ArrayList<Button> mSredisnjiDugmici;
     public ArrayList<Button> mPlayer1;
     public ArrayList<Button> mPlayer2;
     
     boolean player1;
-    boolean player2;
     
     int brojac1;
     int brojac2;
     int brKlikova;
+    int rezultat;
         
     public void initGame(){
         player1 = true;
@@ -272,6 +275,7 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
         Random r = new Random();
         int br = r.nextInt(200-50)+50;
         random = Integer.toString(br);
+        rezultat = Integer.valueOf(random);
         label.setText(random);
         label.setFont(new Font("Tahoma", Font.BOLD, 14));
         
@@ -300,74 +304,101 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
             mSredisnjiDugmici.get(i).getmButton().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    indeksDugmica = Integer.valueOf(e.getActionCommand());
+                    int indeksDugmica = Integer.valueOf(e.getActionCommand());
                     JButton but = (JButton) mSredisnjiDugmici.get(indeksDugmica).getmButton();
                     but.setVisible(false);
-                    onClick();
+                    onClick(indeksDugmica);
+                    
                 }
             });
         }
-        
+        repaint();
     }
     
     
     
-    public void onClick(){
+    public void onClick(int indeksDugmica){
+        int val = mSredisnjiDugmici.get(indeksDugmica).getmValue();
+        Button dugmic1 = new Button(val);
         
         
         if (player1 == true){
             player1 = false;
-            int val = mSredisnjiDugmici.get(Integer.valueOf(indeksDugmica)).getmValue();
-            Button dugmic1 = new Button(val);
             mPlayer1.add(dugmic1);
             JButton dugmePrvo = mPlayer1.get(brojac1).getmButton();
+            panel1Centar.add(dugmePrvo);
             dugmePrvo.setActionCommand(String.valueOf(brojac1));
             dugmePrvo.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-
+                    if(brKlikova >= 10 && player1){
+                        player1=false;
+                        int indeks = Integer.valueOf(e.getActionCommand());
+                        Button element = new Button(mPlayer1.get(indeks).getmValue());
+                        mSredisnjiDugmici.add(element);
+                        element.getmButton().setEnabled(false);
+                        centarCentar.add(element.getmButton());
+                        mPlayer1.get(indeks).getmButton().setVisible(false);
+                        rezultat -= mPlayer1.get(indeks).getmValue();
+                        label.setText(String.valueOf(rezultat));
+                        if (rezultat<0) {
+                            JOptionPane.showMessageDialog(null, "Player 2 WON!");
+                            panel1Centar.removeAll();
+                            panel2Centar.removeAll();
+                            repaint();
+                        }
+                    }
                 }
             });
-            panel1Centar.add(dugmePrvo);
             brojac1 ++;
         }else{
             player1 = true;
-            int val = mSredisnjiDugmici.get(indeksDugmica).getmValue();
-            Button dugmic2 = new Button(val);
-            mPlayer2.add(dugmic2);
+            mPlayer2.add(dugmic1);
             JButton dugmeDrugo = mPlayer2.get(brojac2).getmButton();
-            dugmeDrugo.setActionCommand(String.valueOf(brojac2));
+            panel2Centar.add(dugmeDrugo);
+            dugmeDrugo.setActionCommand(String.valueOf(brojac2+5));
             dugmeDrugo.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-
+                    if (brKlikova >= 10 && !player1){
+                        player1=true;
+                        int indeks = Integer.valueOf(e.getActionCommand());
+                        indeks -= 5;
+                        JButton but = mPlayer2.get(indeks).getmButton();
+                        Button element = new Button(mPlayer2.get(indeks).getmValue());
+                        element.getmButton().setEnabled(false);
+                        mSredisnjiDugmici.add(element);
+                        centarCentar.add(element.getmButton());
+                        mPlayer2.get(indeks).getmButton().setVisible(false);
+                        rezultat -= mPlayer2.get(indeks).getmValue();
+                        label.setText(String.valueOf(rezultat));
+                        if (rezultat<0) {
+                            JOptionPane.showMessageDialog(null, "Player 1 WON!");
+                            panel1Centar.removeAll();
+                            panel2Centar.removeAll();
+                            repaint();
+                        }
+                    }
                 }
             });
-            panel2Centar.add(dugmeDrugo);
             brojac2 ++;
         }
         
+        repaint();
         
         brKlikova ++;
         
         if (brKlikova == 10) {
-            for (int i=0; i<20; i++){
-                mSredisnjiDugmici.get(i).getmButton().setVisible(false);
-            }
-            mSredisnjiDugmici = new ArrayList<>();
+            mSredisnjiDugmici = new ArrayList<Button>();
+            centarCentar.removeAll();
+            centarCentar.setLayout(new GridLayout(10, 1));
+            repaint();
             startGame();
         }
     }
     
     public void startGame(){
-        for (int i=0; i<5; i++){
-            String komanda1 = String.valueOf(i);
-            
-            //mPlayer1.get(i).getmButton().setActionCommand(komanda);
-            //mPlayer2.get(i).getmButton().setActionCommand(komanda);
-            
-            
-        }
+        
         
     }
     
