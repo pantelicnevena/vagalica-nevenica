@@ -341,6 +341,12 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
                         mPlayer1.get(indeks).getmButton().setVisible(false);
                         rezultat -= mPlayer1.get(indeks).getmValue();
                         label.setText(String.valueOf(rezultat));
+                        if (rezultat == 0){
+                            JOptionPane.showMessageDialog(null, "Player 1 WON!");
+                            panel1Centar.removeAll();
+                            panel2Centar.removeAll();
+                            repaint();
+                        }
                         if (rezultat<0) {
                             JOptionPane.showMessageDialog(null, "Player 2 WON!");
                             panel1Centar.removeAll();
@@ -372,6 +378,12 @@ public class JFrameVagalica2 extends javax.swing.JFrame {
                         mPlayer2.get(indeks).getmButton().setVisible(false);
                         rezultat -= mPlayer2.get(indeks).getmValue();
                         label.setText(String.valueOf(rezultat));
+                        if (rezultat == 0){
+                            JOptionPane.showMessageDialog(null, "Player 2 WON!");
+                            panel1Centar.removeAll();
+                            panel2Centar.removeAll();
+                            repaint();
+                        }
                         if (rezultat<0) {
                             JOptionPane.showMessageDialog(null, "Player 1 WON!");
                             panel1Centar.removeAll();
